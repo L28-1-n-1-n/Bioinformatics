@@ -58,9 +58,18 @@ def result_str(matrix, best_alignment, seq1, seq2, pos_i, pos_j):
 
     i = pos_i
     j = pos_j
+    fin_i = len(seq2)
+    fin_j = len(seq1)
     str0 = ""
     str1 = ""
-
+    while (i < fin_i):
+        str1 += str(seq2[fin_i - 1])
+        # str0 += "-"
+        fin_i -= 1
+    while (j < fin_j):
+        str0 += str(seq1[fin_j - 1])
+        # str1 += "-"
+        fin_j -= 1
     while ((i != 0) and (j != 0)):
         if (matrix[i][j] == "D"):
             str1 += str(seq2[i - 1])
@@ -80,6 +89,29 @@ def result_str(matrix, best_alignment, seq1, seq2, pos_i, pos_j):
             str0 += str(seq1[j - 1])
 
             j -= 1
+    #  Should put option : "E" : ends here
+    while (i > 0):
+        str1 += str(seq2[i - 1])
+        str0 += "-"
+        i -= 1
+    while (j > 0):
+        str0 += str(seq1[j - 1])
+        str1 += "-"
+        j -= 1
+    # if (len(str1) != len(str0)):
+    #     m = len(str1) - len(str0)
+    #     if m > 0:
+    #         while (m > 0):
+    #             str0 = str0[::-1] + "-"
+    #             m -= 1
+    #         str1 = str1[::-1]
+    #     else:
+    #         while (m < 0):
+    #             str1 = str1[::-1] + "-"
+    #             m += 1
+    #         str0 = str0[::-1]
+    # best_alignment[1] = str1
+    # best_alignment[0] = str0
 
     best_alignment[1] = str1[::-1]
     best_alignment[0] = str0[::-1]
@@ -109,26 +141,26 @@ def calc(seq1, seq2, i, j):
     left = seq1[j - 1]
 
     if (up == left):
-        # if (up == 'A'):
-        #     match = 3
-        # elif (up == 'C'):
-        #     match = 2
-        # elif (up == 'G'):
-        #     match = 1
-        # elif (up == 'T'):
-        #     match = 2
-        match = 2
+        if (up == 'A'):
+            match = 3
+        elif (up == 'C'):
+            match = 2
+        elif (up == 'G'):
+            match = 1
+        elif (up == 'T'):
+            match = 2
+
     else:
-        # match = -3
-        match = -1
+        match = -3
+
     return (match)
 
 def local(seq1, seq2, i, j, arr, matrix):
 
-    dict = {"D" : 0, "U" : 0, "L" : 0, "E" : 0}
+    dict = {"D" : 0, "U" : 0, "L" : 0}
     dict.update({"D" : calc(seq1, seq2, i, j) + arr[i - 1][j - 1]})
-    dict.update({"U": arr[i - 1][j]- 2})
-    dict.update({"L": arr[i][j - 1] - 2})
+    dict.update({"U": arr[i - 1][j]- 4})
+    dict.update({"L": arr[i][j - 1] - 4})
 
     arr[i][j] = max(dict.values())
     matrix[i][j] = list(dict.keys())[list(dict.values()).index(arr[i][j])]
@@ -138,7 +170,7 @@ def varying_i(seq1, seq2, i, j, arr, matrix):
     dict = {"D" : 0, "U" : 0, "L" : 0}
     dict.update({"D" : calc(seq1, seq2, i, j) + arr[i - 1][j - 1]})
     dict.update({"U": arr[i - 1][j]})
-    dict.update({"L": int(arr[i][j - 1]) - 2})
+    dict.update({"L": int(arr[i][j - 1]) - 4})
 
     arr[i][j] = max(dict.values())
     matrix[i][j] = list(dict.keys())[list(dict.values()).index(arr[i][j])]
@@ -146,14 +178,11 @@ def varying_i(seq1, seq2, i, j, arr, matrix):
 def varying_j(seq1, seq2, i, j, arr, matrix):
     dict = {"D" : 0, "U" : 0, "L" : 0}
     dict.update({"D" : calc(seq1, seq2, i, j) + arr[i - 1][j - 1]})
-    dict.update({"U": arr[i - 1][j] - 2})
+    dict.update({"U": arr[i - 1][j] - 4})
     dict.update({"L": arr[i][j - 1]})
 
     arr[i][j] = max(dict.values())
     matrix[i][j] = list(dict.keys())[list(dict.values()).index(arr[i][j])]
-
-
-
 
 def compose(seq1, seq2):
     print(seq1)
@@ -185,7 +214,7 @@ def compose(seq1, seq2):
     pos_i = coord[0]
     pos_j = coord[1]
 
-    print(best_score)
+    print("best_score is " + str(best_score))
     print(arr)
     print(matrix)
     best_alignment = [best_alignment[:] for best_alignment in [[] * (max(len(seq1), len(seq2)) + 1)] * 2]
