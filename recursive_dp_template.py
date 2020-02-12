@@ -48,6 +48,12 @@ start = time.time()
 # The sequences are contained in the variables seq1 and seq2 from the code above.
 # To work with the printing functions below the best local alignment should be called best_alignment and its score should be called best_score. 
 
+def al(n, m):
+    if ((n == 0) or (m == 0)):
+        return (1)
+    else:
+        return(al(n - 1, m - 1) + al(n - 1, m) + al(n, m - 1))
+
 def result_str(matrix, best_alignment, seq1, seq2):
     i = len(seq2)
     j = len(seq1)
@@ -55,33 +61,24 @@ def result_str(matrix, best_alignment, seq1, seq2):
     str1 = ""
     while ((i != 0) and (j != 0)):
         if (matrix[i][j] == "D"):
-
-            # best_alignment[1] += str(seq2[i - 1])
-            # best_alignment[0].append(seq1[j - 1])
-
             str1 += str(seq2[i - 1])
             str0 += str(seq1[j - 1])
-
             i -= 1
             j -= 1
 
         elif (matrix[i][j] == "U"):
 
-            # best_alignment[1].append(seq2[i - 1])
-            # best_alignment[0].append("-")
-
             str1 += str(seq2[i - 1])
             str0 += "-"
             i -= 1
-        else:
 
-            # best_alignment[1].append("-")
-            # best_alignment[0].append(seq1[j - 1])
+        else:
 
             str1 += "-"
             str0 += str(seq1[j - 1])
 
             j -= 1
+
     best_alignment[1] = str1[::-1]
     best_alignment[0] = str0[::-1]
     print(best_alignment)
@@ -89,10 +86,8 @@ def result_str(matrix, best_alignment, seq1, seq2):
 
 
 def calc(seq1, seq2, i, j):
-    # print(i)
-    # print(j)
+
     up = seq2[i - 1]
-    print(" i is " + str(i) + "and j is " + str(j))
     left = seq1[j - 1]
 
     if (up == left):
@@ -140,18 +135,20 @@ def compose(seq1, seq2):
     print(seq2)
     matrix = [matrix[:] for matrix in [['*'] * (len(seq1) + 1)] * (len(seq2) + 1)]
     arr = [arr[:] for arr in [['*'] * (len(seq1) + 1)] * (len(seq2) + 1)]
-    print(matrix)
+
     # for i in range(0, len(seq1)):
     #     arr[0][i] = -1 * i
     # for j in range(0, len(seq2)):
     #     arr[j][0] = -1 * j
     # print(calc(arr, 1, 1))
-    print (recursion(seq1, seq2, len(seq2), len(seq1), arr, matrix))
+    best_score = (recursion(seq1, seq2, len(seq2), len(seq1), arr, matrix))
+    print(best_score)
     print(arr)
     print(matrix)
     best_alignment = [best_alignment[:] for best_alignment in [[] * (max(len(seq1), len(seq2)) + 1)] * 2]
-    print(best_alignment)
+
     displayAlignment(result_str(matrix, best_alignment, seq1, seq2))
+    print("Number of alignments calculated: " + str(al(len(seq1), len(seq2))))
 
 compose(seq1, seq2)
 #-------------------------------------------------------------
