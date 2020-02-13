@@ -6,7 +6,7 @@ import numpy as np
 
 # YOUR FUNCTIONS GO HERE -------------------------------------
 def find_qscore(data, qmatrix, i, j):
-  qmatrix[i][j] = (len(qmatrix[0]) - 2) * data[i][j] - np.sum(data[i]) - np.sum(data[j])
+  qmatrix[i][j] = (len(qmatrix[0]) - 1) * data[i][j] - np.sum(data[i]) - np.sum(data[j])
 
 def print_data(data, row_sum, letters):
 
