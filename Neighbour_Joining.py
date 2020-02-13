@@ -34,13 +34,17 @@ def print_qmatrix(qmatrix, letters):
   print("\n")
 
 def reduce(data, letters):
-  row_sum = [] * (len(data[0]))
+  size_of_data = len(data[0])
+  if (size_of_data == 2):
+    return(0)
+  new_letter = chr(ord('z') - size_of_data)
+  row_sum = [] * (size_of_data)
   for row in data:
     row_sum.append([np.sum(row)])
 
   print_data(data, row_sum, letters)
 
-  qm_size = len(data[0])
+  qm_size = size_of_data
   qmatrix = [qmatrix[:] for qmatrix in [[0] * (qm_size)] * (qm_size)]
 
   # print(qmatrix)
@@ -83,9 +87,17 @@ def reduce(data, letters):
   # therefore deleted afterwards in min(a,b)
 
   data = np.delete(data, max(a, b), 0)
+  print("one")
+  print(data)
   data = np.delete(data, min(a, b), 0)
+  print("two")
+  print(data)
   data = np.delete(data, max(a, b), 1)
+  print("three")
+  print(data)
   data = np.delete(data, min(a, b), 1)
+  print("four")
+  print(data)
 
   # same logic applies to the deletion of letters, max(a,b) deleted first, smaller index given by min(a,b) not affected
   letters = np.delete(letters, max(a, b))
@@ -99,7 +111,7 @@ def reduce(data, letters):
   to_add = np.insert(to_add, min(a, b), 0)
 
   # insert new letter at appropriate location in letters, given by min(a,b)
-  letters = np.insert(letters, min(a, b), 'u')
+  letters = np.insert(letters, min(a, b), new_letter)
 
   # insert column of updated values at appropriate location, given by min(a,b)
   data = np.insert(data, min(a, b), to_add, axis=1)
@@ -110,6 +122,7 @@ def reduce(data, letters):
     row_sum.append([np.sum(row)])
 
   print_data(data, row_sum, letters)
+  reduce(data, letters)
 # ------------------------------------------------------------
 
 
