@@ -145,12 +145,12 @@ start = time.time()
 # YOUR CODE GOES HERE ----------------------------------------
 
 def NJ():
-  with open(sys.argv[1]) as f:  # Use file to refer to the file object
+  with open(sys.argv[1]) as f:  # Use f to refer to the file object
       line = f.readline() # read the first line
       no_of_cols = len(line.split()) # get the number of columns of the first line
 
   # load only the numbers into a matrix called data
-  data = np.loadtxt(sys.argv[1] , skiprows=1, usecols=range(1 , no_of_cols), dtype=np.float) # Assuming input values have range (-32768, 32767)
+  data = np.loadtxt(sys.argv[1] , skiprows=1, usecols=range(1 , no_of_cols), dtype=np.float) # Assuming input values have range (sys.float_info.min, sys.float_info.max)
 
   # compose an initial list of letters as headings for rows and columns in data matrix
   letters = [] * (no_of_cols - 1)

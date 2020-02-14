@@ -59,6 +59,10 @@ def calc(seq1, seq2, i, j):
     up = seq2[i - 1]
     left = seq1[j - 1]
 
+    # case mis-match
+    match = -3
+
+    # case match
     if (up == left):
         if (up == 'A'):
             match = 3
@@ -68,8 +72,7 @@ def calc(seq1, seq2, i, j):
             match = 1
         elif (up == 'T'):
             match = 2
-    else:
-        match = -3
+
     return (match)
 
 def recursion(seq1, seq2, i, j, arr, matrix):
